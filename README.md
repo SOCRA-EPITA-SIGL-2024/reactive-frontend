@@ -209,6 +209,8 @@ If for some of your component you need local state management, see the [How to u
 - `socra="basket-nav-link"` on the `<NavLink></NavLink>` (or equivalent) menu link of the basket in the main navigation
 - `socra="basket"` on the element that renders `items` in the basket, when navigating to the basket view
 
+> Important: verify that those `socra="..."` tags appears in the html rendered by inspecting the web page and look at the html document.
+
 ## Challenge 2: Remove from basket
 
 Implement the following feature.
@@ -222,3 +224,5 @@ Implement the following feature.
 **Important**: For the grading tool, you will add the following `props` to the following React elements:
 
 - `socra="remove-item"` to the `delete` icon / button in the basket view.
+
+> Important: verify that those `socra="..."` tags appears in the html rendered by inspecting the web page and look at the html document.
