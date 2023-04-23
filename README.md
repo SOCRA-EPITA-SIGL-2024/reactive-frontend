@@ -2,7 +2,7 @@
 
 This workshop is made for students of EPITA - SIGL 2024.
 
-The aim of the workshop is to implement a reactive user interface (UI) for Socarotte.
+The aim of the workshop is to implement **your** reactive user interface (UI) for Socarotte.
 
 To implement it, we will use:
 
@@ -17,6 +17,7 @@ To implement it, we will use:
 Sofar, we have a responsive application, but we don't handle any user interactions (menu navigation or button clicks).
 
 [ReactJS](https://fr.reactjs.org/) is a JavaScript framework from Facebook.
+
 We chose this since it seems to be the most notorious one, when checking [NodeJS framework trends](https://www.npmtrends.com/@angular/core-vs-angular-vs-react-vs-vue-vs-svelte) with its competitors.
 
 ### Install the provided template
@@ -52,7 +53,7 @@ frontend/
 
 ### Create your App component
 
-**Objective**: Replace this `Hello SIGL` with **your** application from the the template with your version of Socarotte from reactive-frontend workshop.
+**Objective**: Replace this `Hello SIGL` with **your** application from the the template with your version of Socarotte from [responsive-frontend workshop](https://github.com/SOCRA-EPITA-SIGL-2024/responsive-frontend).
 
 You already some CSS imported in the `frontend/src/App.jsx` component by the line
 
@@ -68,7 +69,7 @@ Read more about [how to convert JSX to HTML on react website](https://react.dev/
 
 > Note: There is even an online converter to convert your HTML to JSX directly: [html-to-jsx](https://transform.tools/html-to-jsx)
 
-Try to copy paste the content of your `<body></body>` from reactive-frontend workshop as the return of your `function App() { ... }` in `frontend/src/App.jsx`:
+Try to copy paste the content of your `<body></body>` from **your** [responsive-frontend workshop implementation](https://github.com/SOCRA-EPITA-SIGL-2024/responsive-frontend) as the return of your `function App() { ... }` in `frontend/src/App.jsx`:
 
 ```jsx
 import React from "react";
@@ -118,11 +119,11 @@ If you're stuck, feel free to look at the [SOCRA-EPITA-SIGL-2024/frontend-templa
 
 > Note: It's similar to what you have done, but without the `frontend/` directory.
 
-You should now see same the reactive-frontend workshop but using React, congrats!
+You should now see same page from **your** [responsive-frontend workshop implentation](https://github.com/SOCRA-EPITA-SIGL-2024/responsive-frontend) but using React, congrats!
 
 ## Step 2: Make the menu reactive
 
-You will use [react-router-dom (v6)](https://reactrouter.com/docs/en/v6) JavaScript library to implement it.
+You will use [react-router-dom (v6)](https://reactrouter.com/en/6.10.0/start/tutorial) JavaScript library to implement it.
 
 - Install `react-router-dom` in your `frontend/` project:
 
@@ -193,6 +194,8 @@ export default useAppContext;
 ```
 
 Follow the documentation provided [how to use React context](./how-to/REACT-CONTEXT.md) to know how to use the `useAppContext` hooks.
+
+If for some of your component you need local state management, see the [How to use React.useState documentation provided in this workshop](./how-to/REACT-USE-STATE-HOOK.md)
 
 > This documentation explains how to implement the `Add to basket` functionality; which is the objective of the [Challenge 1](#challenge-1-add-to-basket)
 
