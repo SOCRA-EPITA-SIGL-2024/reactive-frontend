@@ -2,235 +2,40 @@
 
 This workshop is made for students of EPITA - SIGL 2024.
 
-The aim of the workshop is to implement a reactive user interface (UI) for Socarotte. 
+The aim of the workshop is to implement a reactive user interface (UI) for Socarotte.
+
 To implement it, we will use:
+
 - [NodeJS](https://nodejs.org/en/about/): to be able to use dependencies (other developper's code)
 - [ReactJS](https://fr.reactjs.org/): to manage DOM elements rendering and local component state
 - [ViteJS](https://vitejs.dev/): to bundle all our source files into a single `JavaScript` file (that will be our production artifact).
 
 > Note: We are doing only the user interface without any data persistency...for now!
 
-## Step 0: Tools
+## Step 1: Add `React` and `Vite`
 
-### IDE
-
-We strongly encourage you to use [Visual Studio Code](https://code.visualstudio.com) for your frontend project.
-It's totally free and open source.
-
-You don't have to install any extra plugins for this workshop.
-
-### Install NodeJS
-
-You need to install NodeJS (a.k.a `node`) on your local machine.
-
-Because NodeJS is a tool that evolves fast and has multiple versions, we will use a versionning tool to help us using multiple versions, depending on the project we're working on: [NVM](https://github.com/nvm-sh/nvm) (Node Version Manager)
-
-To install `nvm`, follow instructions in the README of the project: https://github.com/nvm-sh/nvm#installing-and-updating
-
-Once `nvm` is install:
-
-- Create a file `.nvmrc` with `v19` inside
-- Install node v19 using `nvm`: `nvm install v19`
-
-Then, everytime you work on your project, you can type `nvm use` command, and it will switch you to the version inside the `.nvmrc` file.
-
-You can verify if everything is fine by checking node version: `node -v`
-and it should output version 19.
-
-## Step 1: Create **YOUR** Socarotte
-
-For this Step, you can refer to the frontend-template we've created:
-[SOCRA-EPITA-SIGL-2024/frontend-template (main)](https://github.com/SOCRA-EPITA-SIGL-2024/frontend-template)
-
-### Create your HTML view
-
-Create only with HTML 5 and CSS 3 **your** "Produits" view of Socarotte.
-
-You **do not** have to respect the same layout as our model nor the following screenshot, but we insist on having the following elements (again you can put them wherever you feel like on the page):
-
-- Keep your html `<title>` to `Socra Group XX` (replacing XX by your group number)
-- Main navigation bar with "Produits", "Commandes" and "Panier"
-- A banner with whatever images / text you feel like putting
-- A "Promotion" lane where you could see some products on discount. A discount has:
-  - a name
-  - a price
-  - an amount of the discount
-  - the price discounted
-- A product navigation with "Fruit & Légume", "Volaille", "Viande Rouge", "Boissons", "Vin et spiritueux"
-- A product card with:
-  - an image of the product
-  - a product name
-  - a price per kg
-  - a description of who is selling and how far from our current location
-  - a button to add the product to basket
-
-![socarotte model](images/socarotte-model.png)
-
-Make it yours!
-
-> Important: it is **only static**. You only create a view where navigation is not active. You only create the view for "Produits"
-
-### Make me responsive
-
-Make your version of Socarotte responsive by adding `@media` queries for the following sizes:
-
-- `@media (max-width: 460px) { ... }`: except menus, all elements are displayed in one column ("Promotion"'s items and "Product)
-- `@media (max-width: 768px) { ... }`: the banner is no longer displayed
-- `@media (min-width: 1200px) { ... }`: increase the font-size (you will decide the best ratio)
-
-> Important: do **NOT** forget to add the following metadata in the head of your HTML document:
-
-```xml
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-```
-
-### Add favicon
-
-In order to have a nice logo on your browser tab when running Socarotte, feel free to download this [nice carrot icon](https://raw.githubusercontent.com/SOCRA-EPITA-SIGL-2024/frontend-template/main/public/favicon.ico).
-
-![socarotte favicon](images/browser-favicon.png)
-
-You can of course build your own.
-
-Once downloaded or created, simply add it to under `public/favicon.ico` in your repository. `http-server` will serve it and your browser should render it.
-
-## Step 2: Add `React` and `Vite`
-
-Sofar, we have a responsive application, but we don't handle any user interactions (menu selection or button clicks).
+Sofar, we have a responsive application, but we don't handle any user interactions (menu navigation or button clicks).
 
 [ReactJS](https://fr.reactjs.org/) is a JavaScript framework from Facebook.
 We chose this since it seems to be the most notorious one, when checking [NodeJS framework trends](https://www.npmtrends.com/@angular/core-vs-angular-vs-react-vs-vue-vs-svelte) with its competitors.
 
-Like the previous step, you can see how we did the step 2 in the [freontn]
+### Install the provided template
 
-### Install dependencies
+To avoid tons of copy / paste, we've prepared a small template project to start with `React` and  `Vite`.
 
-- From you project repository, create a new folder `frontend`.
-- Move or create a new `frontend/.nvmrc` file with:
+Follow the README.md instructions on the provided template [SOCRA-EPITA-SIGL-2024/react-vite-template](https://github.com/SOCRA-EPITA-SIGL-2024/react-vite-template)
 
-    ```plain
-    v19
-    ```
-
-- Move and rename your `styles.css` file to `frontend/src/App.css`
-- Move your `public/favicon.ico` file to `frontend/public/favicon.ico`
-- Move your `Dockerfile` file to `frontend/Dockerfile`
-- Create a new `frontend/index.html` with (replacing `XX` by your group number):
-
-    ```html
-    <!DOCTYPE html>
-    <html lang="fr">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SOCRA Group XX</title>
-    </head>
-    <body>
-        <div id="root"></div>
-        <script type="module" src="/src/main.jsx"></script>
-    </body>
-    </html>
-    ```
-
-- Add a new `frontend/.gitignore` file with
-
-    ```plain
-    # Logs
-    logs
-    *.log
-    npm-debug.log*
-    yarn-debug.log*
-    yarn-error.log*
-    pnpm-debug.log*
-    lerna-debug.log*
-
-    node_modules
-    dist
-    dist-ssr
-    *.local
-
-    # Editor directories and files
-    .vscode/*
-    !.vscode/extensions.json
-    .idea
-    .DS_Store
-    *.suo
-    *.ntvs*
-    *.njsproj
-    *.sln
-    *.sw?
-    ```
-
-- Add a new `frontend/package.json` file with:
-
-    ```json
-    {
-        "name": "socarotte",
-        "private": true,
-        "type": "module",
-        "scripts": {
-            "dev": "vite",
-            "build": "vite build",
-            "preview": "vite preview"
-        },
-        "dependencies": {
-            "@fortawesome/fontawesome-free": "^6.4.0",
-            "react": "^18.2.0",
-            "react-dom": "^18.2.0"
-        },
-        "devDependencies": {
-            "@vitejs/plugin-react": "^3.1.0",
-            "vite": "^4.2.1"
-        }
-    }
-    ```
-
-- Add a new `frontend/vite.config.js` file with:
-
-    ```js
-    import { defineConfig } from "vite";
-    import react from "@vitejs/plugin-react";
-
-    // https://vitejs.dev/config/
-    export default defineConfig({
-    plugins: [react()],
-    });
-    ```
-
-- Create a new `frontend/src/main.jsx` with:
-
-    ```jsx
-    import React from "react";
-    import ReactDOM from "react-dom/client";
-    import App from "./App.jsx";
-
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-    ```
-
-- Create a new `frontend/src/App.jsx` with:
-
-    ```jsx
-    import React from "react";
-    import "./App.css";
-
-    function App() {
-        return (
-            <div>
-                Hello React + Vite
-            </div>
-        );
-    }
-
-    export default App;
-    ```
-
-Once you've master this copy/paste step, you should have the following tree of files:
+Once done, you should have the following tree of files:
 
 ```plain
 frontend/
-├── Dockerfile
+├── .gitignore
 ├── index.html
+├── node_modules
+│   ├── ...
+├── .nvmrc
 ├── package.json
+├── package-lock.json
 ├── public
 │   └── favicon.ico
 ├── src
@@ -239,43 +44,31 @@ frontend/
 │   └── main.jsx
 └── vite.config.js
 
-3 directories, 8 files
+59 directories, 11 files
 ```
-
-Let's test.
-
-From your terminal, go to your project's repository and type the following commands:
-
-```sh
-# go to your frontend folder
-cd frontend
-# Use the correct version of node (19). It will read version from `frontend/.nvmrc` file
-nvm use
-# Should now use v19 of Node
-# Install node_modules (dependencies)
-npm install
-# Run the app in dev mode; meaning it will start a webserver with your JS files transformed
-# on your localhost network
-npm run dev
-```
-
-You should now be able to see `Hello React + Vite` on [localhost:5173](http://localhost:5173)
 
 > Note: if you have an issue running `nvm use`, make sure node v19 is installed on your machine.
 > To install it `nvm install v19`
 
-## Create your App component
+### Create your App component
 
-Let's replace this `Hello React + Vite` with your application from Step 1.
-You already have your CSS imported in the `frontend/src/App.jsx` component by the line
+**Objective**: Replace this `Hello SIGL` with **your** application from the the template with your version of Socarotte from reactive-frontend workshop.
+
+You already some CSS imported in the `frontend/src/App.jsx` component by the line
 
 ```jsx
 import "./App.css";
 ```
 
-Now, react `JSX` format is very very close to regular HTML, except attribute are turn in caml case (e.g. `colspan` in html would be `colSpan`), and the `class="mystyle"` attribute is `className="mystyle"` in JSX.
+For this step, you can put all your CSS code in this `frontend/src/App.css` file.
 
-Try to copy paste the content of your `<body></body>` from Step 1 as the return of your `function App() { ... }` in `frontend/src/App.jsx`:
+React `JSX` format is very very close to regular HTML, except attribute are turn in caml case (e.g. `colspan` in html would be `colSpan`), and the `class="mystyle"` attribute is `className="mystyle"` in JSX.
+
+Read more about [how to convert JSX to HTML on react website](https://react.dev/learn/writing-markup-with-jsx#converting-html-to-jsx)
+
+> Note: There is even an online converter to convert your HTML to JSX directly: [html-to-jsx](https://transform.tools/html-to-jsx)
+
+Try to copy paste the content of your `<body></body>` from reactive-frontend workshop as the return of your `function App() { ... }` in `frontend/src/App.jsx`:
 
 ```jsx
 import React from "react";
@@ -283,7 +76,7 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <nav className="menu-horizontal">
         ...
       </nav>
@@ -321,11 +114,13 @@ export default App;
     }
 ```
 
-If you're stuck, feel free to look at the [SOCRA-EPITA-SIGL-2024/frontend-template (react-vite)](https://github.com/SOCRA-EPITA-SIGL-2024/frontend-template/tree/react-vite). It's similar to what you have done, but without the `frontend/` directory.
+If you're stuck, feel free to look at the [SOCRA-EPITA-SIGL-2024/frontend-template (react-vite)](https://github.com/SOCRA-EPITA-SIGL-2024/frontend-template/tree/react-vite).
 
-You should now see same as step 1 but using React, congrats!
+> Note: It's similar to what you have done, but without the `frontend/` directory.
 
-## Step 3: Make the menu reactive
+You should now see same the reactive-frontend workshop but using React, congrats!
+
+## Step 2: Make the menu reactive
 
 You will use [react-router-dom (v6)](https://reactrouter.com/docs/en/v6) JavaScript library to implement it.
 
@@ -343,14 +138,84 @@ Follow the nice tutorial on [react router documentation](https://reactrouter.com
 
 Reorganize your code to split this big `function App () { ... }` React component into several different React components.
 
+Follow the documentation on [React components](./how-to/REACT-COMPONENTS.md) to know more about React components.
+
 ### Implement navigation using react-router
 
-Feel free to look at the [SOCRA-EPITA-SIGL-2024/frontend-template (component-split)](https://github.com/SOCRA-EPITA-SIGL-2024/frontend-template/tree/component-split) to see how the template uses react router:
+Feel free to look at the [SOCRA-EPITA-SIGL-2024/frontend-template (component-split)](https://github.com/SOCRA-EPITA-SIGL-2024/frontend-template/tree/component-split) to see how the template uses react router.
 
 - [How to use the `createBrowserRouter` in the template](https://github.com/SOCRA-EPITA-SIGL-2024/frontend-template/blob/ccba9c8e16f5559bd0af32db27d4065e3bce8310/src/Layout.jsx#L8)
   - [How to use the created browser router with the `RouterProvider`](https://github.com/SOCRA-EPITA-SIGL-2024/frontend-template/blob/component-split/src/App.jsx)
 - [How to navigate using navigation links](https://github.com/SOCRA-EPITA-SIGL-2024/frontend-template/blob/component-split/src/MainMenu.jsx) with [NavItem custom component (only applying css if the current link is active)](https://github.com/SOCRA-EPITA-SIGL-2024/frontend-template/blob/component-split/src/NavItem.jsx)
 
-## Step 4: Add state management to your app
+## Step 3: Add state management to your app
 
-TODO
+**Objective** have several React components reacting on the same action
+
+Several options are available when it comes to state management: [Redux (for React)](https://react-redux.js.org/), [XState](https://xstate.js.org/docs/recipes/react.html) or the [React Context](https://react.dev/reference/react/useContext).
+
+You will use the `React context` to implement state management in your frontend.
+
+Since its implementation is not so trivial, we are providing you the code.
+
+Add a new file `frontend/src/AppContext.jsx` with the following code:
+
+```jsx
+import React from "react";
+
+export const initialState = {
+  basket: [],
+};
+
+export const reducer = (state, action) => {
+  switch (action.type) {
+    // This `case` is an example of how you can
+    // reduce an `action` that adds a new `item` to 
+    // the `state.basket` array
+    case "NEW_BASKET_ITEM":
+      const { item } = action;
+      return {
+        ...state,
+        basket: [...state.basket, item],
+      };
+    default:
+      return state;
+  }
+};
+
+export const AppContext = React.createContext();
+
+function useAppContext() {
+  return React.useContext(AppContext);
+}
+
+export default useAppContext;
+```
+
+Follow the documentation provided [how to use React context](./how-to/REACT-CONTEXT.md) to know how to use the `useAppContext` hooks.
+
+> This documentation explains how to implement the `Add to basket` functionality; which is the objective of the [Challenge 1](#challenge-1-add-to-basket)
+
+## Challenge 1: Add to basket
+
+**Objective** Integrate the `Add to basket` functionality describe in the [example section of the how to use React context](./how-to/REACT-CONTEXT.md#example-add-to-basket-feature)
+
+**Important**: For the grading tool, you will add the following `props` to the following React elements:
+
+- `socra="add-to-basket"` on the `<button></button>` element that is use to add an item to the basket
+- `socra="basket-nav-link"` on the `<NavLink></NavLink>` (or equivalent) menu link of the basket in the main navigation
+- `socra="basket"` on the element that renders `items` in the basket, when navigating to the basket view
+
+## Challenge 2: Remove from basket
+
+Implement the following feature.
+
+**Feature**: When a user selects the `delete` icon of the basket table:
+
+- the item gets removed from the basket table or list (however you've decided to display items in basket)
+- the main navigation's item number is decreased by 1 (e.g. from `(2)` to `(1)` or from `(1)` to nothing)
+- the product becomes enabled again to be put in the basket
+
+**Important**: For the grading tool, you will add the following `props` to the following React elements:
+
+- `socra="remove-item"` to the `delete` icon / button in the basket view.
