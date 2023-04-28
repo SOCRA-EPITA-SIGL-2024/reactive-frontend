@@ -193,6 +193,26 @@ function useAppContext() {
 export default useAppContext;
 ```
 
+And initalize the `AppContext` in your root component (e.g. `App` in the template):
+
+```jsx
+import React from "react";
+import {AppContext, reducer, initialState} from "./AppContext.jsx"
+// ...
+
+function App() {
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  return (
+    <AppContext.Provider value={{ state, dispatch }}>
+      {/* ... */}
+    </AppContext.Provider>
+  );
+}
+
+export default App;
+```
+
 Follow the documentation provided [how to use React context](./how-to/REACT-CONTEXT.md) to know how to use the `useAppContext` hooks.
 
 If for some of your component you need local state management, see the [How to use React.useState documentation provided in this workshop](./how-to/REACT-USE-STATE-HOOK.md)
