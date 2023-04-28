@@ -53,6 +53,37 @@ The `reducer` function is the function that is called when one of the React comp
 
 The `reducer` function will return a new value of the `state` objects which will **trigger** a **re-rendering** of **every** React components the uses the `state`.
 
+### Initialize your AppContext
+
+To use the app context, you fist need to initialize it.
+
+From your root component in your frontend (`App.jsx` in the template), add the following code:
+
+```jsx
+import React from "react";
+import {AppContext, reducer, initialState} from "./AppContext.jsx"
+// ...
+
+function App() {
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  return (
+    <AppContext.Provider value={{ state, dispatch }}>
+      {/* ... */}
+    </AppContext.Provider>
+  );
+}
+
+export default App;
+```
+
+1. [`React.useReducer`](https://react.dev/reference/react/useReducer) is initialized with the `initialState` of your application (in this case; an empty basket)
+2. `AppContext.Provider` is the `React.Context` component which will offer the `{state, dispatch}` props to all its children
+
+In the next steps, usage of `state` and `dispatch` is explain in details.
+
+### useAppContext
+
 To use the `state` and the `dispatch` function in your React component you want to use context for, just use the following hook:
 
 ```jsx
@@ -161,6 +192,26 @@ function useAppContext() {
 export default useAppContext;
 ```
 
+Initialized in the following `App` component:
+
+```jsx
+import React from "react";
+import {AppContext, reducer, initialState} from "./AppContext.jsx"
+// ...
+
+function App() {
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  return (
+    <AppContext.Provider value={{ state, dispatch }}>
+      {/* ... */}
+    </AppContext.Provider>
+  );
+}
+
+export default App;
+```
+
 #### `AddToBasket` React component
 
 The `AddToBasket` button React component will look like:
@@ -174,7 +225,10 @@ function AddToBasket({item}) {
 
     // alreadyAdded is `true` if state.basket contains the `item` passed in props;
     // alreadtAdded is `false` otherwise
-    const alreadyAdded = state.basket.includes((itemInBasket) => itemInBasket.title === item.title);
+    // Note: 
+    //    `find` will return the `item` in basket if found and `undefined` otherwise
+    //    the operator `!!` will return `true` if `item` is found and false if `undefined`
+    const alreadyAdded = !!state.basket.find((itemInBasket) => itemInBasket.title === item.title);
 
     return (
         <button disabled={alreadyAdded} onClick={
