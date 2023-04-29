@@ -219,6 +219,92 @@ If for some of your component you need local state management, see the [How to u
 
 > This documentation explains how to implement the `Add to basket` functionality; which is the objective of the [Challenge 1](#challenge-1-add-to-basket)
 
+## Step 4: Adapt our CD
+
+It's time to deploy all those achievements.
+
+**Objective**: Adapt the CD pipline to deploy the reactive frontend of socrate.
+
+### Dockerize the frontend
+
+You need to adapt yout nginx config to [solve the known problem of react-router with Nginx](https://stackoverflow.com/questions/43951720/react-router-and-nginx).
+
+Create a new nginx folder and create a default.conf nginx file inside `frontend/nginx/default.conf` with the following content:
+
+```nginx
+server {
+
+    listen       80;
+    server_name  localhost;
+
+    location / {
+        root   /usr/share/nginx/html;
+        try_files  $uri /index.html;
+    }
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
+```
+
+- Create a new Dockerfile under `frontend/` directory:
+
+```dockerfile
+FROM node:19 as build
+
+COPY . /code
+WORKDIR /code
+
+RUN npm install
+RUN npm run build
+
+FROM nginx:1.23.4
+
+ADD nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /code/dist/ /usr/share/nginx/html/
+
+```
+
+> Note: this dockerfile uses this nice [multi-stage build feature from Docker](https://docs.docker.com/develop/develop-images/multistage-build/)
+
+- Running `npm run build` will create the `frontend/dist/` folder that will contain all our static JS, HTML, CSS and media files that will be serve by Nginx
+
+- Try out to run the docker container locally:
+
+```sh
+# from frontend/
+docker build -t socrate:react .
+docker run -p 8090:80 socrate:react
+```
+
+Check out your app on [localhost:8090](http://localhost:8090).
+
+### Adapt your github workflow
+
+- Adapt your github workflow to build your docker image from inside `frontend` folder, and you should be set!
+  
+Just add `working-directory: frontend` to your build and publish step.
+
+```yaml
+build-frontend: # you can rename your build step to be more precise!
+  runs-on: ubuntu-latest
+
+  steps:
+    - uses: actions/checkout@v3
+
+    - name: build and publish frontend docker image
+      working-directory: frontend
+      run: # Same as before
+```
+
+- Now just commit and push your changes on main, and you should have your new react app deployed, yeay!
+
 ## Challenge 1: Add to basket
 
 **Objective** Integrate the `Add to basket` functionality describe in the [example section of the how to use React context](./how-to/REACT-CONTEXT.md#example-add-to-basket-feature)
